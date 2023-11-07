@@ -10,12 +10,34 @@ import { loginActions } from '../store/storelogin';
 
 function Login() {
     const dispatch = useDispatch()
-    const navigate = useNavigate('./Components/Home')
+    const navigate = useNavigate()
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [login, setLogin] = useState({ user: '', pass: '' });
 
+    // Función para verificar las credenciales del usuario
+    const isVerifiedUser = () => {
+        // Realiza una llamada a la API para verificar las credenciales
+        fetch(`http://localhost:3030/login?user=${login.user}&password=${login.pass}`)
+            .then(response => response.json())
+            .then(response => {
+                if (response) {
+                    if (Object.keys(response.data).length === 0) {
+                        console.log('Datos incorrectos');
+                    } else {
+                        // Despacha la acción de inicio de sesión con Redux
+                        console.log(response);
+                        dispatch(loginActions.login({
+                            name: response.data.nombre,
+                            rol: response.data.rol
+                        }));
+                        // Navega a la página de inicio
+                        navigate('/home');
+                    }
+                }
+            });
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -37,8 +59,8 @@ function Login() {
                     dispatch(loginActions.login ({
                         name: response.data.nombre,
                         rol: response.data.rol
-                    }))
-                    navigate('/home')
+                    }));
+                    navigate('/home');
                 } else {
                     setError("Usuario o contraseña incorrectos");
                 }
