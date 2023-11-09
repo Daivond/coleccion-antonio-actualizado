@@ -16,28 +16,7 @@ function Login() {
     const [error, setError] = useState('');
     const [login, setLogin] = useState({ user: '', pass: '' });
 
-    // Función para verificar las credenciales del usuario
-    const isVerifiedUser = () => {
-        // Realiza una llamada a la API para verificar las credenciales
-        fetch(`http://localhost:3030/login?user=${login.user}&password=${login.pass}`)
-            .then(response => response.json())
-            .then(response => {
-                if (response) {
-                    if (Object.keys(response.data).length === 0) {
-                        console.log('Datos incorrectos');
-                    } else {
-                        // Despacha la acción de inicio de sesión con Redux
-                        console.log(response);
-                        dispatch(loginActions.login({
-                            name: response.data.nombre,
-                            rol: response.data.rol
-                        }));
-                        // Navega a la página de inicio
-                        navigate('/home');
-                    }
-                }
-            });
-    };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -72,29 +51,31 @@ function Login() {
 
     return (
     <Grid Container
+    bgcolor="#161616"
     justifyContent="center"
     alignItems="center"
-    style={{ minHeight: '100vh'}}>
+    sx={{ minHeight: '100vh',display: 'flex', textAlign: 'center'}}
+    alignContent="center">
         <Container maxWidth = "sm">
-        <Paper elevation={3} sx={{padding: 2, textAlign: 'center', margin: 'auto', marginTop: '100px'}}>
-            <Avatar sx={{m : 1, bgcolor: 'primary.main'}}>
+        <Paper elevation={3} sx={{padding: 5, textAlign: 'center', margin: 'auto'}}>
+            <Avatar sx={{m : 1, bgcolor: 'primary.main', alignItems:'center'}}>
                 <LockOutlinedIcon />
             </Avatar>
             <Typography variant="h5">Iniciar Sesión</Typography>
             <form onSubmit={handleSubmit}>
-                <Grid container spacing={2}>
+                <Grid container spacing={4}>
                     <Grid item xs={12}>
                         <TextField
-                        fullWidth
-                        placeholder='Usuario'
-                        variant='outlined'
-                        color='primary'
-                        onChange={(event) => { setLogin({ ...login, user: event.target.value }) }}
-                        required
+                            fullWidth
+                            placeholder='Usuario'
+                            variant='outlined'
+                            color='primary'
+                            onChange={(event) => { setLogin({ ...login, user: event.target.value }) }}
+                            required
                         />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
                             fullWidth
                             type='password'
                             placeholder='Contraseña'
@@ -102,16 +83,16 @@ function Login() {
                             color='secondary'
                             onChange={(event) => { setLogin({ ...login, pass: event.target.value }) }}
                             required
-                            />
-                        </Grid>
+                        />
                     </Grid>
-                    {error && <Typography color="error">{error}</Typography>}
-                    <br></br>
-                    <Button type='submit' variant='contained' color='primary' fullWidth>
-                        Iniciar Sesión
-                    </Button>
-                </form>
-            </Paper>
+                </Grid>
+                {error && <Typography color="error">{error}</Typography>}
+                <br></br>
+                <Button type='submit' variant='contained' color='primary' fullWidth>
+                    Iniciar Sesión
+                </Button>
+            </form>
+        </Paper>
         </Container>
     </Grid>
     );

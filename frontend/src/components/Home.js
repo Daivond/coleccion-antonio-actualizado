@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useSelector, useDispatch} from 'react-redux';
 import { loginActions } from '../store/storelogin';
 import { useNavigate } from "react-router-dom";
@@ -28,11 +28,25 @@ function Home() {
 
     // Renderizado del componente Home
         return (
-            <div>
-                <Typography variant = 'h1'>Página home de Antonio David Alonso Ramos</Typography>
-                <Typography variant='h2'> {userData.userName} Rol: {userData.userRol}</Typography>
-                <Button variant='outlined' onClick={handleLogout}> Cerrar Sesión</Button>
-            </div>
+            <Grid
+                bgcolor="#161616"
+                justifyContent="center"
+                alignItems="center"
+                sx={{ minHeight: '100vh',display: 'flex', textAlign: 'center'}}
+                alignContent="center">
+                    <div>
+                    <Typography variant = 'h1' color='primary'>
+                        Página home de Antonio David Alonso Ramos
+                    </Typography>
+                    <Typography variant='h2' color='secondary'> 
+                        {userData.userName} Rol: {userData.userRol}
+                    </Typography>
+                    <Button variant='outlined' color='info' onClick={handleLogout}>
+                        Cerrar Sesión
+                    </Button>
+                    </div>
+                </Grid>
+            
         );
 }
 
