@@ -11,8 +11,8 @@ import { loginActions } from '../store/storelogin';
 function Login() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const [user, setUser] = useState('');
-    const [password, setPassword] = useState('');
+    const [user] = useState('');
+    const [password] = useState('');
     const [error, setError] = useState('');
     const [login, setLogin] = useState({ user: '', pass: '' });
 
@@ -72,11 +72,12 @@ function Login() {
 
     return (
     <Grid Container
+    bgcolor="#161616"
     justifyContent="center"
     alignItems="center"
-    style={{ minHeight: '100vh'}}>
+    sx={{ minHeight: '100vh',display: 'flex', textAlign: 'center'}}>
         <Container maxWidth = "sm">
-        <Paper elevation={3} sx={{padding: 2, textAlign: 'center', margin: 'auto', marginTop: '100px'}}>
+        <Paper elevation={3} sx={{padding: 5, textAlign: 'center', margin: 'auto'}}>
             <Avatar sx={{m : 1, bgcolor: 'primary.main'}}>
                 <LockOutlinedIcon />
             </Avatar>
