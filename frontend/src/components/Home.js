@@ -1,11 +1,8 @@
-import React from 'react'
-import { Typography } from "@mui/material";
-import { useSelector, useDispatch} from 'react-redux';
-import { loginActions } from '../store/storelogin';
+import React, { useState, useEffect } from 'react'
+import { useSelector} from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import { Button, AppBar, Container,Toolbar, Grid, Link, Paper, Box, TextField} from "@mui/material";
-import Album from '@mui/icons-material/Album'
-import { useEffect, useState } from 'react';
+import { Button, Grid, Paper, Box, TextField} from "@mui/material";
+import TopBar from './TopBar';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
 import Table from '@mui/material/Table';
@@ -16,10 +13,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 function Home() {
-    const dispatch = useDispatch()
     const navigate = useNavigate()
     const userData = useSelector (state => state.login)
     const isLoggedin = userData.isAudenticated;
+
+    console.log('Estado actual del usuario:', userData);
 
     // Efecto secundario para redirigir al usuario si no ha iniciado sesión
     useEffect(()=>{
@@ -29,20 +27,16 @@ function Home() {
         handleGetItem()
         }, [isLoggedin, navigate])
 
-    // Función para manejar el cierre de sesión
-    console.log('Datos del usuario en el store: ', userData)
-    const handleLogout = (e) => {
-            dispatch(loginActions.logout());
-            navigate('/');
-    };
-
     const [item, setItem] = useState({ nombre: '', marca: '', tipo: '', precio: '' })
 
     const [tableData, setTableData] = useState([])
 
+    const [isFormValid, setIsFormValid] = useState(true);
+
 
     const handleSaveItem = (e) => {
-
+        e.preventDefault();
+        if (item.nombre && item.tipo && item.marca && item.precio) {
         fetch(`http://localhost:3030/addItem?nombre=${item.nombre}&marca=${item.marca}&tipo=${item.tipo}&precio=${item.precio}`)
 
             .then(response => response.json())
@@ -50,10 +44,16 @@ function Home() {
                 if (response > 0) {
                     handleGetItem()
                     alert('Datos guardados con éxito')
+    // Aqui hacemos que cuando se le de al botón para introducir los datos, los campos de texto vuelvan a estar vacio 
+                    setItem({ nombre: '', marca: '', tipo: '', precio: '' });
                 } else {
                     alert('Datos no guardados')
                 }
             })
+            setIsFormValid(true);
+        } else {
+            setIsFormValid(false);
+        }
     };
 
     const handleDeleteItem=(id) => {
@@ -86,84 +86,74 @@ function Home() {
 
     // Renderizado del componente Home
         return <>
-            <AppBar position='static'>
-                <Container>
-                    <Toolbar>
-                        <Grid container>
-                            <Grid item xs={1} md={2} lg={3}>
-                            <Album />
-                            <Typography sx={{display: 'inline' }}>
-                                {userData.userName}
-                            </Typography>
-                            </Grid>
-                            <Grid item xs={3} md={1} lg={2}>
-                                <Link to='/home'>Inicio</Link>
-                            </Grid>
-                            <Grid item xs={3} md={1} lg={2}>
-                                <Link to=''>Informe</Link>
-                            </Grid>
-                            <Grid item xs={3} md={1} lg={3}>
-                                <Link to=''>Ayuda</Link>
-                            </Grid>
-                            <Grid item xs={1} md={1} lg={1}>
-                                <Button size='large' variant='outlined' color='primary' onClick = {handleLogout}>
-                                    Cerrar Sesión
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </Toolbar>
-                </Container>
-            </AppBar>
 
+        {/* Lo primero que hacemos es llamar al componente Topbar para que nos muestre la barra superior */}
+        <div>
+            <TopBar /> {/* Llamada al componente TopBar */}
+        </div>
+
+            
             <Grid Container
                 bgcolor="#161616"
                 justifyContent="center"
                 alignItems="center"
                 sx={{ minHeight: '87vh',display: 'flex', textAlign: 'center'}}
                 alignContent="center">
-                        <Paper elevation={5} sx={{padding: 5, textAlign: 'center', margin: 'auto'}}>
-                            <Box component='form' autoComplete='off' onSubmit={handleSaveItem} >
-                                <Grid container spacing={2}>
-                                    <Grid item xs={3} md={3}>
-                                        <TextField
-                                        label='Nombre'
-                                        required
-                                        value={item.nombre}
-                                        onChange={(event) => setItem({...item, nombre: event.target.value })}>
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={3} md={3}>
-                                        <TextField
-                                            label='Marca'
-                                            value={item.marca}
-                                            onChange={(event) => setItem({ ...item, marca: event.target.value })}>
-                                        </TextField>
-                                    </Grid>
-
-                                    <Grid item xs={3} md={3}>
-                                        <TextField
-                                            label='Tipo'
-                                            value={item.tipo}
-                                            onChange={(event) => setItem({ ...item, tipo: event.target.value })}>
-                                        </TextField>
-                                    </Grid>
-
-                                    <Grid item xs={3} md={3}>
-                                        <TextField
-                                            label='Precio'
-                                            value={item.precio}
-                                            onChange={(event) => setItem({ ...item, precio: event.target.value })}>
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={5} md={5} />
-                                    <Grid item xs={3} md={3}>
-                                        <Button size='large' variant='outlined' onClick={handleSaveItem}>
-                                            Insertar Datos
-                                        </Button>
-                                    </Grid>
+                    <Paper elevation={5} sx={{padding: 5, textAlign: 'center', margin: 'auto', border : '20px'}}>
+                        <Box component='form' autoComplete='off' onSubmit={handleSaveItem} >
+                            <Grid container spacing={2}>
+                                <Grid item xs={6} md={6}>
+                                    <TextField
+                                    label='Nombre'
+                                    required
+                                    value={item.nombre}
+                                    onChange={(event) => setItem({...item, nombre: event.target.value })}
+                                    error={!isFormValid && !item.nombre}
+                                    helperText={!isFormValid && !item.nombre ? 'Este campo es obligatorio' : ''}
+                                    />
                                 </Grid>
-                            </Box>
-                        </Paper>
+
+                                <Grid item xs={6} md={6}>
+                                    <TextField
+                                        label='Tipo'
+                                        required
+                                        value={item.tipo}
+                                        onChange={(event) => setItem({ ...item, tipo: event.target.value })}
+                                        error={!isFormValid && !item.tipo}
+                                        helperText={!isFormValid && !item.tipo ? 'Este campo es obligatorio' : ''}
+                                    />
+                                </Grid>
+
+                                <Grid item xs={6} md={6}>
+                                    <TextField
+                                        label='Marca'
+                                        required
+                                        value={item.marca}
+                                        onChange={(event) => setItem({ ...item, marca: event.target.value })}
+                                        error={!isFormValid && !item.marca}
+                                        helperText={!isFormValid && !item.marca ? 'Este campo es obligatorio' : ''}
+                                    />
+                                </Grid>
+
+                                <Grid item xs={6} md={6}>
+                                    <TextField
+                                        label='Precio'
+                                        required
+                                        value={item.precio}
+                                        onChange={(event) => setItem({ ...item, precio: event.target.value })}
+                                        error={!isFormValid && !item.precio}
+                                        helperText={!isFormValid && !item.precio ? 'Este campo es obligatorio' : ''}
+                                    />
+                                </Grid>
+
+                                <Grid item xs={12} md={12} sx={{textAlign: 'center' }}>
+                                    <Button size='large' variant='outlined' onClick={handleSaveItem}>
+                                        Insertar Datos
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    </Paper>
             </Grid>
 
             <Grid Container
@@ -187,9 +177,10 @@ function Home() {
                     {tableData.map((row) => (
                         <TableRow key={row.id}>
                             <TableCell>
-                                <Button onClick={() => handleDeleteItem(row.id)}>
+    {/* Metemos dentro del condional el boton para eliminar datos de la base de datos, asi solo el admin puede hacerlo */}
+                                { userData.userRol === 'admin' && <Button onClick={() => handleDeleteItem(row.id)}>
                                     <DeleteForeverIcon />
-                                </Button>
+                                </Button> }
                             </TableCell>
                             <TableCell>{row.nombre}</TableCell>
                             <TableCell>{row.marca}</TableCell>
@@ -197,11 +188,10 @@ function Home() {
                             <TableCell>{row.precio}</TableCell>
                         </TableRow>
                     ))}
-
                 </TableBody>
             </Table>
-        </TableContainer>
-        </Grid>
+            </TableContainer>
+            </Grid>
         </>;
 }
 

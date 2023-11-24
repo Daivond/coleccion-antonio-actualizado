@@ -2,7 +2,7 @@
 
 
 import React, { useState } from 'react'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin';
 import { Container, Typography, Grid, Paper, TextField, Button, Avatar} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -15,29 +15,6 @@ function Login() {
     const [password] = useState('');
     const [error, setError] = useState('');
     const [login, setLogin] = useState({ user: '', pass: '' });
-
-    // Función para verificar las credenciales del usuario
-    const isVerifiedUser = () => {
-        // Realiza una llamada a la API para verificar las credenciales
-        fetch(`http://localhost:3030/login?user=${login.user}&password=${login.pass}`)
-            .then(response => response.json())
-            .then(response => {
-                if (response) {
-                    if (Object.keys(response.data).length === 0) {
-                        console.log('Datos incorrectos');
-                    } else {
-                        // Despacha la acción de inicio de sesión con Redux
-                        console.log(response);
-                        dispatch(loginActions.login({
-                            name: response.data.nombre,
-                            rol: response.data.rol
-                        }));
-                        // Navega a la página de inicio
-                        navigate('/home');
-                    }
-                }
-            });
-    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -78,10 +55,10 @@ function Login() {
     sx={{ minHeight: '100vh',display: 'flex', textAlign: 'center'}}>
         <Container maxWidth = "sm">
         <Paper elevation={3} sx={{padding: 5, textAlign: 'center', margin: 'auto'}}>
-            <Avatar sx={{m : 1, bgcolor: 'primary.main'}}>
-                <LockOutlinedIcon />
+            <Avatar sx={{m : 'auto', bgcolor: 'primary.main'}}>
+                <CurrencyBitcoinIcon />
             </Avatar>
-            <Typography variant="h5">Iniciar Sesión</Typography>
+            <Typography variant="h4">Iniciar Sesión</Typography>
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>

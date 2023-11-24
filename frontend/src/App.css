@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+@keyframes borderAnimation {
+  0% {
+    border-color: red;
+  }
+  50% {
+    border-color: blue;
+  }
+  100% {
+    border-color: red;
+  }
+}
+
+.borderAnimation {
+  animation: borderAnimation 20s linear infinite;
+}
