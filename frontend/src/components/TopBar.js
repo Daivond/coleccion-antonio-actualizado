@@ -60,12 +60,12 @@ function TopBar() {
                                 {userData.userRol === 'admin' ? <div readOnly>Admin</div> : <div readOnly>User</div>}
                                 </Typography> 
                             </Grid>
-                            <Grid item xs={1} md={2} lg={3}>
+                            <Grid item xs={1} md={2} lg={2}>
                 {/* // Asignamos un renderizado condicional para mostar un icono u otro dependiendo del rol del usuario */}
                                 {userData.userRol === 'admin' ? <Album /> : <PersonIcon />}
-                            <Typography sx={{display: 'inline' }} color="primary" component="div">
-                                {userData.userName}
-                            </Typography>
+                                <Typography sx={{display: 'inline' }} color="primary" component="div">
+                                    {userData.userName}
+                                </Typography>
                             </Grid>
                             <Grid item xs={3} md={1} lg={2}>
                                 <Link to='/Home' style={{ color: 'inherit', textDecoration: 'none' }}>
@@ -74,16 +74,21 @@ function TopBar() {
                             </Grid>
                 {/* Al meter todo el gris siguiente dentro de la condicion, estamos haciendo que solo se muestre ese enlace al admin, pero para el resto
                 hacemos que no se vea un campo vacío, sino que los enlaces de Incio y Ayuda se autoAlinean otra vez para que no parezca raro */}
-                            {userData.userRol === 'admin' && <Grid item xs={3} md={1} lg={2}>
+                            {userData.userRol === 'admin' ? <Grid item xs={3} md={1} lg={2}>
                                 <Link to='/Informes' style={{ color: 'inherit', textDecoration: 'none' }}>
                                     <Typography color='secondary'>Informes</Typography>
                                 </Link>
-                            </Grid> }
-                            <Grid item xs={3} md={1} lg={3}>
+                            </Grid> : <></>}
+                            <Grid item xs={3} md={1} lg={2}>
                                 <Link to='/Ayuda' style={{ color: 'inherit', textDecoration: 'none' }}>
                                     <Typography color='secondary'>Ayuda</Typography>
                                 </Link>
                             </Grid>
+                            {userData.userRol === 'admin' ? <Grid item xs={3} md={1} lg={2}>
+                                <Link to='/Usuarios' style={{ color: 'inherit', textDecoration: 'none' }}>
+                                    <Typography color='secondary'>Usuarios</Typography>
+                                </Link>
+                            </Grid> : <></>}
                             <Grid item xs={1} md={1} lg={1}>
                                 <Button size='big' variant='contained' color='secondary' onClick = {handleLogout}>
                                     Salir

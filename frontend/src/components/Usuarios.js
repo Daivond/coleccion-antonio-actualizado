@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect} from 'react';
+import TopBar from './TopBar';
 import { useSelector} from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { Button, Grid, Paper, Box, TextField} from "@mui/material";
-import TopBar from './TopBar';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
 import Table from '@mui/material/Table';
@@ -12,7 +12,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-function Home() {
+function Usuarios () {
+
     const navigate = useNavigate()
     const userData = useSelector (state => state.login)
     const isLoggedin = userData.isAudenticated;
@@ -24,28 +25,28 @@ function Home() {
         if (!isLoggedin) { 
                 navigate('/')
         }
-        handleGetItem()
+        handleGetUser()
         }, [isLoggedin, navigate])
 
-    const [item, setItem] = useState({ nombre: '', marca: '', tipo: '', precio: '' })
+    const [user, setUser] = useState({ nombre: '', login: '', password: '', rol: '' })
 
     const [tableData, setTableData] = useState([])
 
     const [isFormValid, setIsFormValid] = useState(true);
 
 
-    const handleSaveItem = (e) => {
+    const handleSaveUser = (e) => {
         e.preventDefault();
-        if (item.nombre && item.tipo && item.marca && item.precio) {
-        fetch(`http://localhost:3030/addItem?nombre=${item.nombre}&marca=${item.marca}&tipo=${item.tipo}&precio=${item.precio}`)
+        if (user.nombre && user.login && user.password && user.rol) {
+        fetch(`http://localhost:3030/addUser?nombre=${user.nombre}&login=${user.login}&password=${user.password}&rol=${user.rol}`)
 
             .then(response => response.json())
             .then(response => {
                 if (response > 0) {
-                    handleGetItem()
+                    handleGetUser()
                     alert('Datos guardados con éxito')
     // Aqui hacemos que cuando se le de al botón para introducir los datos, los campos de texto vuelvan a estar vacio 
-                    setItem({ nombre: '', marca: '', tipo: '', precio: '' });
+                    setUser({ nombre: '', login: '', password: '', rol: '' });
                 } else {
                     alert('Datos no guardados')
                 }
@@ -58,22 +59,22 @@ function Home() {
 
     const handleDeleteItem=(id) => {
 
-        fetch(`http://localhost:3030/deleteItem?id=${id}`)
+        fetch(`http://localhost:3030/deleteUser?id=${id}`)
 
             .then(response => response.json())
             .then(response => {
                 if (response < 0) {
                     alert('Datos no eliminados')
                 } else {
-                    handleGetItem()
+                    handleGetUser()
                     alert('Datos eliminados')
                 }
             })
     };
 
-    const handleGetItem = async (e) => {
+    const handleGetUser = async (e) => {
 
-        const response = await fetch(`http://localhost:3030/getItems`)
+        const response = await fetch(`http://localhost:3030/getUsers`)
 
             .then(response => response.json())
             .then(response => {
@@ -84,77 +85,72 @@ function Home() {
             })
     };
 
-    // Renderizado del componente Home
-        return <>
-
-        {/* Lo primero que hacemos es llamar al componente Topbar para que nos muestre la barra superior */}
-        <div>
-            <TopBar /> {/* Llamada al componente TopBar */}
-        </div>
-
-            
-        { userData.userRol === 'invitado' ? <></> :<Grid Container
+    return<>
+    <div>
+        <TopBar /> {/* Llamada al componente TopBar */}
+    </div>
+    <Grid Container
                 bgcolor="#161616"
                 justifyContent="center"
                 alignItems="center"
                 sx={{ minHeight: '87vh',display: 'flex', textAlign: 'center'}}
                 alignContent="center">
                     <Paper elevation={5} sx={{padding: 5, textAlign: 'center', margin: 'auto', border : '20px'}}>
-                        <Box component='form' autoComplete='off' onSubmit={handleSaveItem} >
+                        <Box component='form' autoComplete='off' onSubmit={handleSaveUser} >
                             <Grid container spacing={2}>
                                 <Grid item xs={6} md={6}>
                                     <TextField
                                     label='Nombre'
                                     required
-                                    value={item.nombre}
-                                    onChange={(event) => setItem({...item, nombre: event.target.value })}
-                                    error={!isFormValid && !item.nombre}
-                                    helperText={!isFormValid && !item.nombre ? 'Este campo es obligatorio' : ''}
+                                    value={user.nombre}
+                                    onChange={(event) => setUser({...user, nombre: event.target.value })}
+                                    error={!isFormValid && !user.nombre}
+                                    helperText={!isFormValid && !user.nombre ? 'Este campo es obligatorio' : ''}
                                     />
                                 </Grid>
 
                                 <Grid item xs={6} md={6}>
                                     <TextField
-                                        label='Tipo'
+                                        label='Login'
                                         required
-                                        value={item.tipo}
-                                        onChange={(event) => setItem({ ...item, tipo: event.target.value })}
-                                        error={!isFormValid && !item.tipo}
-                                        helperText={!isFormValid && !item.tipo ? 'Este campo es obligatorio' : ''}
+                                        value={user.login}
+                                        onChange={(event) => setUser({ ...user, login: event.target.value })}
+                                        error={!isFormValid && !user.login}
+                                        helperText={!isFormValid && !user.login ? 'Este campo es obligatorio' : ''}
                                     />
                                 </Grid>
 
                                 <Grid item xs={6} md={6}>
                                     <TextField
-                                        label='Marca'
+                                        label='Password'
                                         required
-                                        value={item.marca}
-                                        onChange={(event) => setItem({ ...item, marca: event.target.value })}
-                                        error={!isFormValid && !item.marca}
-                                        helperText={!isFormValid && !item.marca ? 'Este campo es obligatorio' : ''}
+                                        value={user.password}
+                                        onChange={(event) => setUser({ ...user, password: event.target.value })}
+                                        error={!isFormValid && !user.password}
+                                        helperText={!isFormValid && !user.password ? 'Este campo es obligatorio' : ''}
                                     />
                                 </Grid>
 
                                 <Grid item xs={6} md={6}>
                                     <TextField
-                                        label='Precio'
+                                        label='Rol'
                                         required
-                                        value={item.precio}
-                                        onChange={(event) => setItem({ ...item, precio: event.target.value })}
-                                        error={!isFormValid && !item.precio}
-                                        helperText={!isFormValid && !item.precio ? 'Este campo es obligatorio' : ''}
+                                        value={user.rol}
+                                        onChange={(event) => setUser({ ...user, rol: event.target.value })}
+                                        error={!isFormValid && !user.rol}
+                                        helperText={!isFormValid && !user.rol ? 'Este campo es obligatorio' : ''}
                                     />
                                 </Grid>
 
                                 <Grid item xs={12} md={12} sx={{textAlign: 'center' }}>
-                                    <Button size='large' variant='outlined' onClick={handleSaveItem}>
-                                        Insertar Datos
+                                    <Button size='large' variant='outlined' onClick={handleSaveUser}>
+                                        Insertar Usuario
                                     </Button>
                                 </Grid>
                             </Grid>
                         </Box>
                     </Paper>
-            </Grid>}
+            </Grid>
 
             <Grid Container
                 bgcolor="#161616"
@@ -183,16 +179,16 @@ function Home() {
                                 </Button> }
                             </TableCell>
                             <TableCell>{row.nombre}</TableCell>
-                            <TableCell>{row.marca}</TableCell>
-                            <TableCell>{row.tipo}</TableCell>
-                            <TableCell>{row.precio}</TableCell>
+                            <TableCell>{row.login}</TableCell>
+                            <TableCell>{row.password}</TableCell>
+                            <TableCell>{row.rol}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
             </TableContainer>
             </Grid>
-        </>;
+    </>
 }
 
-export default Home;
+export default Usuarios

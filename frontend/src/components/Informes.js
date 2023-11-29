@@ -4,13 +4,16 @@ import { useSelector} from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { Button, Grid, Paper} from "@mui/material";
 import InformeColeccion from './InformeColeccion';
+import InformeUsuarios from './InformeUsuarios';
 
 function Informes () {
 
     const [botonClicked, setBotonClicked] = useState(false)
+    const [botonClicked2, setBotonClicked2] = useState(false)
     const navigate = useNavigate()
     const userData = useSelector (state => state.login)
     const [datosBaseDatos, setDatosBaseDatos] = useState([]);
+    const [datosUsuarios, setDatosUsuarios] = useState([])
     const isLoggedin = userData.isAudenticated;
 
     const handleGetItem = () => {
@@ -24,17 +27,35 @@ function Informes () {
             })
     };
 
+    
+    const handleGetUser = async (e) => {
+        fetch(`http://localhost:3030/getUsers`)
+            .then(response => response.json())
+            .then(response => {
+                console.log(response)
+                if (Object.keys(response.data).length !== 0) {
+                    setDatosUsuarios(response.data)
+                }
+            })
+    };
+
     useEffect(()=>{
         if (!isLoggedin) { 
                 navigate('/')
         }
         handleGetItem()
+        handleGetUser()
         console.log(datosBaseDatos)
+        console.log(datosUsuarios)
 
     }, [isLoggedin, navigate])
 
     const handleClick= (e) => {
         setBotonClicked((prev) => !prev);
+    }
+
+    const handleClick2 = (e) => {
+        setBotonClicked2((prev) => !prev);
     }
 
     return<>
@@ -43,10 +64,12 @@ function Informes () {
         <Grid>
             <Paper elevation={1} sx={{padding: 10, textAlign: 'center'}}>
                 <Button variant="contained" textAlign='center' onClick={handleClick}>Informe Coleccion</Button>
+                <Button variant="outlined" textAlign='center' onClick={handleClick2}>Informe Usuarios</Button>
             </Paper>
             {botonClicked? <InformeColeccion datos={datosBaseDatos}/>:null}
+            {botonClicked2? <InformeUsuarios datos={datosUsuarios}/>:null}
         </Grid>
-        </Grid>
+    </Grid>
     </>
 }
 

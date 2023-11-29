@@ -5,6 +5,8 @@ import './App.css';
 import Login from './components/Login';
 import Home from './components/Home';
 import Informes from './components/Informes';
+import Usuarios from './components/Usuarios';
+import Ayuda from './components/Ayuda';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 
 const router = createBrowserRouter([
@@ -22,6 +24,14 @@ const router = createBrowserRouter([
       {
         path: '/Informes',
         element: <Informes />
+      },
+      {
+        path : '/Usuarios',
+        element: <Usuarios />
+      },
+      {
+        path : '/Ayuda',
+        element: <Ayuda />
       }
     ]
   }
