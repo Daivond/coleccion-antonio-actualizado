@@ -2,7 +2,7 @@ import React, { useState, useEffect} from 'react';
 import TopBar from './TopBar';
 import { useSelector} from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import { Button, Grid, Paper} from "@mui/material";
+import { Button, Grid, Paper, Tooltip} from "@mui/material";
 import InformeColeccion from './InformeColeccion';
 
 function Informes () {
@@ -42,7 +42,9 @@ function Informes () {
         <TopBar /> {/* Llamada al componente TopBar */}
         <Grid>
             <Paper elevation={1} sx={{padding: 10, textAlign: 'center'}}>
-                <Button variant="contained" textAlign='center' onClick={handleClick}>Informe Coleccion</Button>
+                <Tooltip title="Botón que permite mostrar u ocultar la tabla 'Informe de datos' que muestra el contenido de la tabla 'colección' en la BD" arrow>
+                    <Button variant="contained" textAlign='center' onClick={handleClick}>Informe Coleccion</Button>
+                </Tooltip>
             </Paper>
             {botonClicked? <InformeColeccion datos={datosBaseDatos}/>:null}
         </Grid>

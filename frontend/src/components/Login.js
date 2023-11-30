@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react'
 import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin';
-import { Container, Typography, Grid, Paper, TextField, Button, Avatar} from '@mui/material';
+import { Container, Typography, Grid, Paper, TextField, Button, Avatar, Tooltip} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginActions } from '../store/storelogin';
@@ -85,9 +85,11 @@ function Login() {
                     </Grid>
                     {error && <Typography color="error">{error}</Typography>}
                     <br></br>
-                    <Button type='submit' variant='contained' color='primary' fullWidth>
-                        Iniciar Sesión
-                    </Button>
+                    <Tooltip title="Botón que permite comprobar si el usuario y contraseña son correctos e iniciar sesión" arrow>
+                        <Button type='submit' variant='contained' color='primary' fullWidth>
+                            Iniciar Sesión
+                        </Button>
+                    </Tooltip>
                 </form>
             </Paper>
         </Container>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Component } from 'react'
 import { loginActions } from '../store/storelogin';
-import { AppBar, Container, Toolbar, Grid, Typography, Button } from "@mui/material";
+import { AppBar, Container, Toolbar, Grid, Typography, Button, Tooltip } from "@mui/material";
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch} from 'react-redux';
 import { useNavigate } from "react-router-dom";
@@ -80,14 +80,16 @@ function TopBar() {
                                 </Link>
                             </Grid> }
                             <Grid item xs={3} md={1} lg={3}>
-                                <Link to='/Ayuda' style={{ color: 'inherit', textDecoration: 'none' }}>
+                                <Link to='/Manual.pdf' target='_blank' style={{ color: 'inherit', textDecoration: 'none' }}>
                                     <Typography color='secondary'>Ayuda</Typography>
                                 </Link>
                             </Grid>
                             <Grid item xs={1} md={1} lg={1}>
+                            <Tooltip title="Botón para cerrar la sesión de usuario actual y volver al 'Login'" arrow>
                                 <Button size='big' variant='contained' color='secondary' onClick = {handleLogout}>
                                     Salir
                                 </Button>
+                            </Tooltip>
                             </Grid>
                         </Grid>
                     </Toolbar>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector} from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import { Button, Grid, Paper, Box, TextField} from "@mui/material";
+import { Button, Grid, Paper, Box, TextField, Tooltip} from "@mui/material";
 import TopBar from './TopBar';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
@@ -147,9 +147,11 @@ function Home() {
                                 </Grid>
 
                                 <Grid item xs={12} md={12} sx={{textAlign: 'center' }}>
-                                    <Button size='large' variant='outlined' onClick={handleSaveItem}>
-                                        Insertar Datos
-                                    </Button>
+                                    <Tooltip title="Botón para insertar datos de productos en la tabla de 'colección' en la BD" arrow>
+                                        <Button size='large' variant='outlined' onClick={handleSaveItem}>
+                                            Insertar Datos
+                                        </Button>
+                                    </Tooltip>
                                 </Grid>
                             </Grid>
                         </Box>
@@ -178,9 +180,11 @@ function Home() {
                         <TableRow key={row.id}>
                             <TableCell>
     {/* Metemos dentro del condional el boton para eliminar datos de la base de datos, asi solo el admin puede hacerlo */}
-                                { userData.userRol === 'admin' && <Button onClick={() => handleDeleteItem(row.id)}>
-                                    <DeleteForeverIcon />
-                                </Button> }
+                                <Tooltip title="Botón en forma de papelera para borrar los datos deseados en la tabla 'colección' en la BD" arrow>
+                                    { userData.userRol === 'admin' && <Button onClick={() => handleDeleteItem(row.id)}>
+                                        <DeleteForeverIcon />
+                                    </Button> }
+                                </Tooltip>
                             </TableCell>
                             <TableCell>{row.nombre}</TableCell>
                             <TableCell>{row.marca}</TableCell>
